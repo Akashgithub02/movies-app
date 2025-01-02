@@ -42,6 +42,15 @@ pipeline {
             }
         }
 
+        stage('Trivy Vulnerability Scan') {
+            steps {
+                script {
+                    // Scan the Docker image for vulnerabilities using Trivy
+                    sh "trivy image ${DOCKER_REGISTRY}/${IMAGE_NAME}:${params.DOCKER_TAG} --format json --output /tmp/vulnerability-report.json"
+                }
+            }
+        }
+
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
@@ -55,6 +64,8 @@ pipeline {
     post {
         success {
             echo "Docker image has been successfully pushed to the registry."
+            echo "Trivy vulnerability scan results:"
+            sh "cat /tmp/vulnerability-report.json"
         }
         failure {
             echo "The pipeline failed. Please check the logs."
