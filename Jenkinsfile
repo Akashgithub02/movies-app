@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         // DockerHub credentials
         DOCKER_CREDENTIALS = 'docker-hub-credentials' // Jenkins credentials ID
@@ -18,7 +18,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pull the latest code from the repository
-                 git branch: 'main', credentialsId: 'github-credentials', url: 'https://github.com/Akashgithub02/movies-app.git'
+                git branch: 'main', credentialsId: GITHUB_CREDENTIALS, url: 'https://github.com/Akashgithub02/movies-app.git'
             }
         }
 
@@ -34,8 +34,8 @@ pipeline {
         stage('Login to DockerHub') {
             steps {
                 script {
-                    // Login to DockerHub with Jenkins credentials
-                    docker.withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    // Login to DockerHub with Jenkins credentials securely
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
                     }
                 }
@@ -50,8 +50,6 @@ pipeline {
                 }
             }
         }
-
-        
     }
 
     post {
