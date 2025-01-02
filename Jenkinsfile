@@ -7,7 +7,7 @@ pipeline {
         IMAGE_NAME = 'movies-app'
         DOCKER_TAG = "${env.BUILD_NUMBER}" // Using the build number as the image tag
         DOCKER_REGISTRY = 'kotharkarakash4775' // DockerHub username
-        
+        GITHUB_CREDENTIALS = 'github-credentials'
     }
 
     parameters {
@@ -18,7 +18,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pull the latest code from the repository
-                git branch: 'main', url: 'https://github.com/yourusername/movies-app.git'
+                git credentialsId: "${GITHUB_CREDENTIALS}", url: 'https://github.com/Akashgithub02/movies-app.git'
             }
         }
 
