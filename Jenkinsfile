@@ -6,8 +6,8 @@ pipeline {
         DOCKER_CREDENTIALS = 'docker-hub-credentials' // Jenkins credentials ID
         IMAGE_NAME = 'movies-app'
         DOCKER_TAG = "${env.BUILD_NUMBER}" // Using the build number as the image tag
-        DOCKER_REGISTRY = 'your-dockerhub-username' // DockerHub username
-        ECR_REPO_URI = 'your-ecr-repository-uri' // For Amazon ECR
+        DOCKER_REGISTRY = 'kotharkarakash4775' // DockerHub username
+        
     }
 
     parameters {
