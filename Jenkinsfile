@@ -41,14 +41,14 @@ pipeline {
                 }
             }
         }
-        stage('Trivy Vulnerability Scan') {
-            steps {
-                script {
-                    // Scan the Docker image for vulnerabilities using Trivy
-                    sh "trivy image ${DOCKER_REGISTRY}/${IMAGE_NAME}:${params.DOCKER_TAG} --format json --output /tmp/vulnerability-report.json"
-                }
-            }
+       stage('Trivy Vulnerability Scan') {
+          steps {
+               script {
+            // Scan the Docker image for vulnerabilities using Trivy
+            sh "trivy image --format json --output /tmp/vulnerability-report.json ${DOCKER_REGISTRY}/${IMAGE_NAME}:${params.DOCKER_TAG}"
         }
+    }
+}
 
         stage('Push Docker Image to Docker Hub') {
             steps {
