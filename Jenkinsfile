@@ -18,7 +18,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pull the latest code from the repository
-                git credentialsId: "${GITHUB_CREDENTIALS}", url: 'https://github.com/Akashgithub02/movies-app.git'
+                 git branch: 'main', credentialsId: 'github-credentials', url: 'https://github.com/Akashgithub02/movies-app.git'
             }
         }
 
