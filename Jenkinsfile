@@ -41,7 +41,6 @@ pipeline {
                 }
             }
         }
-
         stage('Trivy Vulnerability Scan') {
             steps {
                 script {
@@ -61,7 +60,7 @@ pipeline {
         }
     }
 
-    post {
+     post {
         success {
             echo "Docker image has been successfully pushed to the registry."
             echo "Trivy vulnerability scan results:"
