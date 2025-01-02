@@ -1,0 +1,53 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  POSTGRES_USER: movies_user
+  POSTGRES_PASSWORD: movies_password
+  POSTGRES_DB: flix_development
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: 5432
+
+# Stage 1: Build
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd movies/flix
+    - docker build -t movies-app .
+
+# Stage 2: Test
+test:
+  stage: test
+  image: ruby:3.2.2-slim
+  services:
+    - name: postgres:latest
+      alias: postgres
+  before_script:
+    - cd movies/flix
+    - apt-get update -qq && apt-get install -y nodejs yarn build-essential libpq-dev pkg-config
+    - bundle install
+    - bin/rails db:create db:migrate RAILS_ENV=test
+  script:
+    - bin/rails test
+
+# Stage 3 Deploying the application  
+deploy:
+  stage: deploy
+  image: docker/compose:1.29.2  # Use a specific version
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - cd movies/flix
+  script:
+    - echo "Deploying Movies App..."
+    - docker-compose up -d
+
+
+
